@@ -7,14 +7,19 @@
 #include <iostream>
 #include <string>
 
-#include "mdf/mdfreader.h"
+
+
+void test()
+{
+
+
+
+}
 
 
 int main(int argc, char *argv[])
 {
-    std::cout << "hello mdfplot" << std::endl;
-    std::string mdfpath = "";
-    mdf::MdfReader reader(mdfpath);
+
 
     QApplication a(argc, argv);
 

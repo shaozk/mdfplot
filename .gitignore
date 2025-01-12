@@ -33,3 +33,9 @@
 
 # Cmake
 build/
+
+# Mdf
+*.mdf
+*.MDF
+*.mf4
+*.MF4

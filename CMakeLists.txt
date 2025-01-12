@@ -14,17 +14,25 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
 set(TS_FILES mdfplot_zh_CN.ts)
 
+set(PROJECT_UTILS
+    #Signals.h
+    #Signals.cpp
+    SignalsReader.h
+    SignalsReader.cpp
+)
+
 set(PROJECT_SOURCES
-        main.cpp
-        MainWindow.cpp
-        MainWindow.h
-        MainWindow.ui
-        ${TS_FILES}
+    main.cpp
+    MainWindow.cpp
+    MainWindow.h
+    MainWindow.ui
+    ${TS_FILES}
 )
 
 qt_add_executable(mdfplot
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
+    ${PROJECT_UTILS}
 )
 
 qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
