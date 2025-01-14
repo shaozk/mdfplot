@@ -1,8 +1,8 @@
 /**
- * @file 		MdfUtil.h
+ * @file        MdfReader.h
  * @author      shaozk
- * @date		2025/01/10
- * @brief 		读取Mdf文件
+ * @date        2025/01/10
+ * @brief       读取Mdf文件
  * @details
  */
 
@@ -28,7 +28,9 @@ class SignalsReader
 public:
     explicit SignalsReader(const QString& filePath);
     ~SignalsReader() = default;
-    mdf::DataGroupList getDataGroupList();
+
+    DataGroupList getDataGroupList() const;
+    ChannelObserverList getChannelObserverList() const;
 
 private:
     std::unique_ptr<mdf::MdfReader> mReader;

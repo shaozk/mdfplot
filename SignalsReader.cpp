@@ -33,29 +33,35 @@ SignalsReader::SignalsReader(const QString& filePath)
 
 }
 
-mdf::DataGroupList SignalsReader::getDataGroupList()
+mdf::DataGroupList SignalsReader::getDataGroupList() const
 {
-    const auto* mdf_file = mReader->GetFile(); // Get the file interface.
-    DataGroupList dg_list;                   // Get all measurements.
-    mdf_file->DataGroups(dg_list);
-#if 0
-    // in this example, we read in all sample data and fetch all values.
-    for (auto* dg4 : dg_list) {
-        // Subscribers holds the sample data for a channel.
-        // You should normally only subscribe on some channels.
-        // We need a list to hold them.
+    const auto* mdfFile = mReader->GetFile(); // Get the file interface.
+    DataGroupList dgList;                   // Get all measurements.
+    mdfFile->DataGroups(dgList);
+    return dgList;
+}
 
-        channelobserverlist subscriber_list;
-        const auto cg_list = dg4->channelgroups();
-        for (const auto* cg4 : cg_list ) {
-            const auto cn_list = cg4->channels();
-            for (const auto* cn4 : cn_list) {
-                // create a subscriber and add it to the temporary list
-                auto sub = createchannelobserver(*dg4, *cg4, *cn4);
-
-                subscriber_list.emplace_back(std::move(sub));
+ChannelObserverList SignalsReader::getChannelObserverList() const
+{
+    auto dgList = getDataGroupList();
+    ChannelObserverList subscriberList;
+    for (auto* dg4 : dgList)
+    {
+        const auto cgList = dg4->ChannelGroups();
+        for (const auto* cg4 : cgList )
+        {
+            const auto cn_list = cg4->Channels();
+            for (const auto* cn4 : cn_list)
+            {
+                auto sub = CreateChannelObserver(*dg4, *cg4, *cn4);
+                subscriberList.emplace_back(std::move(sub));
             }
         }
+    }
+    return subscriberList;
+}
+
+#if 0
         // now it is time to read in all samples
         reader.readdata(*dg4); // read raw data from file
         double channel_value = 0.0; // channel value (no scaling)
@@ -77,5 +83,3 @@ mdf::DataGroupList SignalsReader::getDataGroupList()
     }
     reader.Close(); // Close the file
 #endif
-    return dg_list;
-}

@@ -1,5 +1,12 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+/**
+ * @file        MainWindow.h
+ * @author      shaozk
+ * @date        2025/01/10
+ * @brief       s主界面文件
+ * @details
+ */
+
+#pragma
 
 #include <QMainWindow>
 
@@ -23,4 +30,3 @@ private slots:
 private:
     Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H

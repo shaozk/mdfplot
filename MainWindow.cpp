@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-#include "SignalsReader.h".h"
+#include "SignalsReader.h'
 
 using namespace mdf;
 
@@ -25,7 +25,7 @@ void MainWindow::on_actionOpenFile_triggered()
 {
     // TODO
     // 打开文件管理器，获取文件路径
-    QString filePath = "/Users/shaozk/code/github/mdfplot/mdf/Recorder_2024-06-17_01-05-29.mf4";
+    QString filePath = "/Users/data/mdf/Recorder_2024-06-17_01-05-29.mf4";
     SignalsReader reader(filePath);
     auto dgList = reader.getDataGroupList();
     for (auto* dg4 : dgList)
@@ -36,6 +36,13 @@ void MainWindow::on_actionOpenFile_triggered()
         {
             qDebug() << group->Name();
         }
+    }
+
+    // 获取信号里列表
+    auto subscriberList = reader.getChannelObserverList();
+    for (auto& sub : subscriberList)
+    {
+        qDebug() << sub->Name();
     }
 }
 
