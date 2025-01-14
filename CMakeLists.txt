@@ -9,10 +9,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets PrintSupport  LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport LinguistTools)
 
 set(TS_FILES mdfplot_zh_CN.ts)
+
+set(QCP_SRC
+    qcp/qcustomplot.h
+    qcp/qcustomplot.cpp
+)
 
 set(PROJECT_UTILS
     #Signals.h
@@ -33,11 +38,15 @@ qt_add_executable(mdfplot
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
     ${PROJECT_UTILS}
+    ${QCP_SRC}
 )
 
 qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 
-target_link_libraries(mdfplot PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(mdfplot
+    PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+    PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport
+)
 
 # 链接mdf库
 target_include_directories(mdfplot PUBLIC "/usr/local/include")

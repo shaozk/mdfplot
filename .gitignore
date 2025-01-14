@@ -39,3 +39,4 @@ build/
 *.MDF
 *.mf4
 *.MF4
+.DS_Store

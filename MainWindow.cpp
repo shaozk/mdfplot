@@ -3,15 +3,17 @@
 
 #include <QDebug>
 
-#include "SignalsReader.h'
+#include "SignalsReader.h"
 
 using namespace mdf;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , mPlot(new QCustomPlot)
 {
     ui->setupUi(this);
+    ui->verticalLayout->addWidget(mPlot);
 
     on_actionOpenFile_triggered();
 }
@@ -40,9 +42,14 @@ void MainWindow::on_actionOpenFile_triggered()
 
     // 获取信号里列表
     auto subscriberList = reader.getChannelObserverList();
+    QStringList labelList;
     for (auto& sub : subscriberList)
     {
         qDebug() << sub->Name();
+        labelList.emplace_back(QString::fromStdString(sub->Name()));
     }
+    ui->listWidget->addItems(labelList);
+
+
 }
 

@@ -10,6 +10,8 @@
 
 #include <QMainWindow>
 
+#include "qcp/qcustomplot.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -29,4 +31,5 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QCustomPlot* mPlot;
 };
