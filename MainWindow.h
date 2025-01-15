@@ -11,6 +11,8 @@
 #include <QMainWindow>
 
 #include "qcp/qcustomplot.h"
+#include "SignalsReader.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,8 +30,12 @@ public:
 
 private slots:
     void on_actionOpenFile_triggered();
+    void on_listWidget_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;
     QCustomPlot* mPlot;
+
+    SignalsReader* mReader;
 };
+
