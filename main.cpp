@@ -8,19 +8,15 @@
 #include <string>
 
 
+#include <mdf/mdfreader.h>
 
-void test()
+void testMdf()
 {
-
-
-
+    mdf::MdfReader reader("");
 }
-
 
 int main(int argc, char *argv[])
 {
-
-
     QApplication a(argc, argv);
 
     QTranslator translator;
@@ -35,5 +31,4 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     return a.exec();
-
 }

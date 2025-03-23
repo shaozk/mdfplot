@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+      "expat",
+      "zlib"
+    ]
+  }
+  

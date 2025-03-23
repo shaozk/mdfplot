@@ -31,8 +31,12 @@
 *.out
 *.app
 
+# VS
+.vs/
+
 # Cmake
 build/
+out/
 
 # Mdf
 *.mdf

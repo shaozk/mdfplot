@@ -26,7 +26,7 @@ void MainWindow::on_actionOpenFile_triggered()
 {
     // TODO
     // 打开文件管理器，获取文件路径
-    QString filePath = "/Users/data/mdf/Recorder_2024-06-17_01-05-29.mf4";
+    QString filePath = "U:\\mdf\\Recorder_2024-06-17_01-05-29.mf4";
     mReader = new SignalsReader(filePath);
 
     // 获取信号里列表

@@ -2,7 +2,7 @@
  * @file        MainWindow.h
  * @author      shaozk
  * @date        2025/01/10
- * @brief       s主界面文件
+ * @brief       主界面文件
  * @details
  */
 
