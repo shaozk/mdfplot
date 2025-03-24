@@ -6,13 +6,16 @@
  * @details
  */
 
-#pragma
+#pragma once
 
 #include <QMainWindow>
 
 #include "qcp/qcustomplot.h"
-#include "SignalsReader.h"
+#include "SignalReader.h"
+#include "SignalListView.h"
+#include "SignalListModel.h"
 
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,14 +31,18 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-private slots:
+public slots:
     void on_actionOpenFile_triggered();
-    void on_listWidget_itemClicked(QListWidgetItem *item);
+
 
 private:
     Ui::MainWindow *ui;
     QCustomPlot* mPlot;
+    SignalListView* mListView;
 
-    SignalsReader* mReader;
+    SignalReader* mReader;
+
+    //QStandardItemModel* mModel;
+    SignalListModel* mModel;
 };
 

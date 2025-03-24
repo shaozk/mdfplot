@@ -33,6 +33,7 @@
 
 # VS
 .vs/
+.vscode/
 
 # Cmake
 build/

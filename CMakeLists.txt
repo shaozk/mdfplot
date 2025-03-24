@@ -13,22 +13,27 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(TS_FILES mdfplot_zh_CN.ts)
 
 set(QCP_SRC
-    qcp/qcustomplot.h
-    qcp/qcustomplot.cpp
+    "qcp/qcustomplot.h"
+    "qcp/qcustomplot.cpp"
 )
 
 set(PROJECT_UTILS
-    #Signals.h
-    #Signals.cpp
-    SignalsReader.h
-    SignalsReader.cpp
+    "Signals.h"
+    "Signals.cpp"
+    "SignalReader.h"
+    "SignalReader.cpp"
 )
 
 set(PROJECT_SOURCES
-    main.cpp
-    MainWindow.cpp
-    MainWindow.h
-    MainWindow.ui
+    "main.cpp"
+    "MainWindow.cpp"
+    "MainWindow.h"
+    "MainWindow.ui"
+    "SignalListModel.h"
+    "SignalListModel.cpp"
+    "SignalListView.h"
+    "SignalListView.cpp"
+    
     #${TS_FILES}
 )
 
@@ -43,6 +48,7 @@ add_executable(${PROJECT_NAME}
 find_package(Qt5 REQUIRED COMPONENTS 
     Core
     Widgets 
+    Gui
     PrintSupport
     LinguistTools
 )
@@ -50,6 +56,7 @@ find_package(Qt5 REQUIRED COMPONENTS
 target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt5::Core
     PRIVATE Qt5::Widgets
+    PRIVATE Qt5::Gui
     PRIVATE Qt5::PrintSupport
 )
 

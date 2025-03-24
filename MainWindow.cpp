@@ -1,7 +1,10 @@
 #include "MainWindow.h"
 #include "./ui_MainWindow.h"
 
+#include "SignalListModel.h"
+
 #include <QDebug>
+#include <QList>
 
 using namespace mdf;
 
@@ -12,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
     , mReader(nullptr)
 {
     ui->setupUi(this);
-    ui->verticalLayout->addWidget(mPlot);
+    setWindowTitle("MdfPlot");
 
-    on_actionOpenFile_triggered();
+    //on_actionOpenFile_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -24,29 +27,45 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpenFile_triggered()
 {
-    // TODO
+    // 新建视图
+    mListView = new SignalListView(this);
+    mModel = new SignalListModel();
+    mModel->addSignal(Signals("test", "test", 1.0));
+    mModel->addSignal(Signals("test", "test", 1.0));
+    mModel->addSignal(Signals("test", "test", 1.0));
+    mModel->addSignal(Signals("test", "test", 1.0));
+    mListView->setModel(mModel);
+    
+
+    QWidget* centralWidget = new QWidget();
+    QSplitter* splitter = new QSplitter(Qt::Horizontal);
+    splitter->addWidget(mListView);
+    splitter->addWidget(mPlot);
+    QList<int> list;
+    list.append(200);
+    list.append(600);
+    splitter->setSizes(list);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(splitter);
+
+    centralWidget->setLayout(layout);
+
+    setCentralWidget(centralWidget);   
+
+#if 0
     // 打开文件管理器，获取文件路径
     QString filePath = "U:\\mdf\\Recorder_2024-06-17_01-05-29.mf4";
-    mReader = new SignalsReader(filePath);
+    mReader = new SignalReader(filePath);
 
     // 获取信号里列表
     auto signalList = mReader->getSignalList();
-    ui->listWidget->addItems(signalList);
 
-    if (signalList.isEmpty())
+    for (auto signal : signalList)
     {
-        return;
+        mModel->addSignal(Signals(signal, "test", 1.0));
     }
-
-}
-
-void MainWindow::on_listWidget_itemClicked(QListWidgetItem *item)
-{
-    // 获取选中行状态
-    auto signalName = item->text();
-    qDebug() << signalName;
-    auto vec = mReader->getSignalValueList(signalName);
-    qDebug() << vec.size();
-
+#endif
 }
 
