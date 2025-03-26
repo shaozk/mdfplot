@@ -1,22 +1,24 @@
 #include "MainWindow.h"
 #include "./ui_MainWindow.h"
 
-#include "SignalListModel.h"
+#include "SignalView.h"
 
 #include <QDebug>
 #include <QList>
 
-using namespace mdf;
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , mPlot(new QCustomPlot)
-    , mReader(nullptr)
 {
     ui->setupUi(this);
     setWindowTitle("MdfPlot");
 
+    // 在主窗口中创建 MDI 区域
+    mMdiArea = new QMdiArea(this);
+    setCentralWidget(mMdiArea);
+    mMdiArea->setViewMode(QMdiArea::TabbedView);
+    mMdiArea->setTabsClosable(true);
+    mMdiArea->setTabsMovable(true);
     //on_actionOpenFile_triggered();
 }
 
@@ -27,45 +29,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpenFile_triggered()
 {
-    // 新建视图
-    mListView = new SignalListView(this);
-    mModel = new SignalListModel();
-    mModel->addSignal(Signals("test", "test", 1.0));
-    mModel->addSignal(Signals("test", "test", 1.0));
-    mModel->addSignal(Signals("test", "test", 1.0));
-    mModel->addSignal(Signals("test", "test", 1.0));
-    mListView->setModel(mModel);
-    
-
-    QWidget* centralWidget = new QWidget();
-    QSplitter* splitter = new QSplitter(Qt::Horizontal);
-    splitter->addWidget(mListView);
-    splitter->addWidget(mPlot);
-    QList<int> list;
-    list.append(200);
-    list.append(600);
-    splitter->setSizes(list);
-
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(splitter);
-
-    centralWidget->setLayout(layout);
-
-    setCentralWidget(centralWidget);   
-
-#if 0
     // 打开文件管理器，获取文件路径
     QString filePath = "U:\\mdf\\Recorder_2024-06-17_01-05-29.mf4";
-    mReader = new SignalReader(filePath);
+    SignalView *view = new SignalView(filePath);
 
-    // 获取信号里列表
-    auto signalList = mReader->getSignalList();
+    QMdiSubWindow* subWindow = mMdiArea->addSubWindow(view);
+    subWindow->setWindowTitle(filePath);
+    mMdiArea->addSubWindow(subWindow);
+    subWindow->show();
 
-    for (auto signal : signalList)
-    {
-        mModel->addSignal(Signals(signal, "test", 1.0));
-    }
-#endif
 }
 

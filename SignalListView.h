@@ -17,19 +17,22 @@
 #include <QTableView>
 #include <QListView>
 #include <QListWidgetItem>
+#include <QMouseEvent>
 
-class SignalListView : public QWidget
+class SignalListView : public QTableView
 {
     Q_OBJECT
 public:
     explicit SignalListView(QWidget* parent = nullptr);
-    ~SignalListView();    
+    ~SignalListView();  
+    
+signals:
+    void signalSelected(const QString& signalName);
 
-    void setModel(SignalListModel* model) { mView->setModel(model); }
+protected:
+    // 重写 mousePressEvent 事件处理函数
+    void mousePressEvent(QMouseEvent *event) override;
+private:
 
 private:
-    void on_listWidget_itemClicked(QListWidgetItem *item);
-
-private:
-    QTableView* mView;    
 };

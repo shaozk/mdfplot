@@ -5,15 +5,12 @@
 #include <QHeaderView>
 
 SignalListView::SignalListView(QWidget* parent)
-    : QWidget(parent)
-    , mView(new QTableView(this))
+    : QTableView(parent)
 {
-    setLayout(new QVBoxLayout(this));
-    layout()->addWidget(mView);
-    mView->setAutoFillBackground(true);
-    mView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    mView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    setAutoFillBackground(true);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+    horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 SignalListView::~SignalListView()
@@ -21,12 +18,21 @@ SignalListView::~SignalListView()
 
 }
 
-void SignalListView::on_listWidget_itemClicked(QListWidgetItem *item)
+
+void SignalListView::mousePressEvent(QMouseEvent* event)
 {
-    // 获取选中行状态
-    auto signalName = item->text();
-    qDebug() << signalName;
+    
+    // 调用基类的实现以确保默认行为
+    QTableView::mousePressEvent(event);
 
-
+    if (event->button() == Qt::LeftButton)
+    {
+        QModelIndex index = indexAt(event->pos());
+        if (index.isValid())
+        {
+            emit signalSelected(QString::number(index.row()));
+        }
+    }
+    
 }
 

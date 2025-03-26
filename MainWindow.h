@@ -10,12 +10,8 @@
 
 #include <QMainWindow>
 
-#include "qcp/qcustomplot.h"
-#include "SignalReader.h"
-#include "SignalListView.h"
-#include "SignalListModel.h"
-
 #include <QStandardItemModel>
+#include <QMdiArea>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -37,12 +33,9 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    QCustomPlot* mPlot;
-    SignalListView* mListView;
 
-    SignalReader* mReader;
+    // SignalView* mView;
+    QMdiArea *mMdiArea;
 
-    //QStandardItemModel* mModel;
-    SignalListModel* mModel;
 };
 

@@ -33,7 +33,10 @@ set(PROJECT_SOURCES
     "SignalListModel.cpp"
     "SignalListView.h"
     "SignalListView.cpp"
-    
+    "SignalPlot.h"
+    "SignalPlot.cpp"
+    "SignalView.h"
+    "SignalView.cpp"
     #${TS_FILES}
 )
 
