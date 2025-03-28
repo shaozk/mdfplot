@@ -2,6 +2,8 @@
 #include "./ui_MainWindow.h"
 
 #include "SignalView.h"
+#include "Globals.h"
+#include "About.h"
 
 #include <QDebug>
 #include <QList>
@@ -11,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("MdfPlot");
+    setWindowTitle(Globals::name() + " " + Globals::versionString());
 
     // 在主窗口中创建 MDI 区域
     mMdiArea = new QMdiArea(this);
@@ -40,3 +42,8 @@ void MainWindow::on_actionOpenFile_triggered()
 
 }
 
+void MainWindow::on_actionAbout_triggered()
+{
+    About* about = new About(this);
+    about->exec();
+}

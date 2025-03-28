@@ -26,6 +26,8 @@ set(PROJECT_UTILS
 
 set(PROJECT_SOURCES
     "main.cpp"
+    "Globals.h"
+    "Globals.cpp"
     "MainWindow.cpp"
     "MainWindow.h"
     "MainWindow.ui"
@@ -37,6 +39,9 @@ set(PROJECT_SOURCES
     "SignalPlot.cpp"
     "SignalView.h"
     "SignalView.cpp"
+    "About.h"
+    "About.cpp"
+    "About.ui"
     #${TS_FILES}
 )
 

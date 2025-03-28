@@ -2,7 +2,7 @@
  * @file        MainWindow.h
  * @author      shaozk
  * @date        2025/01/10
- * @brief       主界面文件
+ * @brief       主界面
  * @details
  */
 
@@ -29,6 +29,7 @@ public:
 
 public slots:
     void on_actionOpenFile_triggered();
+    void on_actionAbout_triggered();
 
 
 private:
