@@ -14,12 +14,10 @@
 #include "Signals.h"
 
 #include <QObject>
-#include <QAbstractListModel>
 #include <QAbstractItemModel>
-#include <QAbstractTableModel>
 #include <QList>
 
-class SignalListModel : public QAbstractTableModel
+class SignalListModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
@@ -34,7 +32,7 @@ public:
     };
     Q_ENUM(ColoumnType)
 
-#if 0
+#if 1
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &child) const override;
 #endif

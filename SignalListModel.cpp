@@ -3,7 +3,7 @@
 #include <QString>
 
 SignalListModel::SignalListModel(QObject* parent)
-    : QAbstractTableModel(parent)
+    : QAbstractItemModel(parent)
 {
 }
 
@@ -11,7 +11,7 @@ SignalListModel::~SignalListModel()
 {
 }
 
-#if 0
+#if 1
 QModelIndex SignalListModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!parent.isValid())

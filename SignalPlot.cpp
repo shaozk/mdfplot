@@ -16,6 +16,7 @@ SignalPlot::~SignalPlot()
 
 void SignalPlot::addSubRect(const QString& signalName)
 {
+    qDebug() << "add sub rect " << signalName;
     removeAllRect();
     createSubRect(1);
     replot();

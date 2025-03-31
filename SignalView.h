@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "SignalListView.h"
+#include "SignalExplorer.h"
 #include "SignalListModel.h"
 #include "SignalPlot.h"
 #include "SignalReader.h"
@@ -30,7 +30,7 @@ public:
     //void addSignal(const Signals& signal);
 
 private:
-    SignalListView* mView;
+    SignalExplorer* mExplorer;
     SignalListModel* mModel;
     SignalPlot* mPlot;
 
