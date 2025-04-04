@@ -1,4 +1,5 @@
 #include "SignalExplorer.h"
+#include "SignalListModel.h"
 
 #include <QVBoxLayout>
 #include <QDebug>
@@ -6,11 +7,14 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QListView>
+#include <QTreeView>
 #include <QFrame>
 #include <QLineEdit>
 
+#include "Signals.h"
+
 SignalExplorer::SignalExplorer(QWidget* parent)
-    : mSignalView(new QListView(parent))
+    : mSignalView(new QTreeView(parent))
     , mSearchFrame(new QFrame(this))
 {
     auto* layout = new QVBoxLayout(this);
@@ -23,15 +27,23 @@ SignalExplorer::SignalExplorer(QWidget* parent)
 
 	mSearchEdit = new QLineEdit(mSearchFrame);
 	mSearchEdit->setClearButtonEnabled(true);
-	mSearchEdit->setPlaceholderText("Search/Filter");
+	mSearchEdit->setPlaceholderText("Search");
 	layoutFilter->addWidget(mSearchEdit);
 
 	mSearchBtn = new QPushButton(mSearchFrame);
 	mSearchBtn->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
-	// mSearchBtn->setCheckable(true);
-	// mSearchBtn->setFlat(true);
 	mSearchBtn->setText("Search");
 	layoutFilter->addWidget(mSearchBtn);
+
+	mCancelBtn = new QPushButton(mSearchFrame);
+	mCancelBtn->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
+	mCancelBtn->setText("Cancel");
+	connect(mCancelBtn, &QPushButton::clicked, this, [this]() {
+		mSearchEdit->clear();
+		mSignalView->clearSelection();
+		emit signalCanceled();
+	});
+	layoutFilter->addWidget(mCancelBtn);
 
 	layout->addWidget(mSearchFrame);
 
@@ -43,8 +55,10 @@ SignalExplorer::SignalExplorer(QWidget* parent)
 	mSignalView->setAcceptDrops(true);
 	mSignalView->setDropIndicatorShown(true);
 	mSignalView->setDragDropMode(QAbstractItemView::InternalMove);
-
+	mSignalView->header()->sectionResizeMode(QHeaderView::Stretch);
 	layout->addWidget(mSignalView);
+
+	connect(mSignalView, &QTreeView::clicked, this, &SignalExplorer::signalClicked);
 
 }
 
@@ -55,5 +69,18 @@ SignalExplorer::~SignalExplorer()
 
 void SignalExplorer::setModel(SignalListModel* model)
 {
-	//mSignalView->setModel(model);
+	mSignalView->setModel(std::move(model));
+	/// connect(model, &SignalListModel::signalSelected, this, &SignalExplorer::signalSelected)
+	
+
+}
+
+void SignalExplorer::signalClicked(const QModelIndex& index)
+{
+	auto* model = qobject_cast<SignalListModel*>(mSignalView->model());
+	if (model)
+	{
+		const auto* signal = model->getSignal(index);
+		emit signalSelected(signal);
+	}
 }

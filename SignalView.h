@@ -17,7 +17,9 @@
 #include "SignalReader.h"
 
 #include <QWidget>
-#include <QString>
+class QString;
+
+using ChannelObserverListPtr = std::unique_ptr<ChannelObserverList>;
 
 class SignalView : public QWidget 
 {
@@ -28,6 +30,10 @@ public:
 
     bool loadFile(const QString& filePath);
     //void addSignal(const Signals& signal);
+
+private slots:
+    void plotSignal(const Signals* signal);
+    void clearSignal();
 
 private:
     SignalExplorer* mExplorer;

@@ -15,15 +15,15 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+#include "Signals.h"
 
 using mdf::MdfReader;
 using mdf::DataGroupList;
 using mdf::ChannelObserverPtr;
 using mdf::ChannelObserverList;
 
-using MdfReaderPtr = std::unique_ptr<mdf::MdfReader>;
 using ChannelObserverMap = std::map<std::string, mdf::ChannelObserverPtr>;
-using ChannelObserverMapPtr = std::unique_ptr<ChannelObserverMap>;
+
 /**
  * @brief 解析MDF数据工具类
 */
@@ -33,18 +33,15 @@ public:
     explicit SignalReader(const QString& filePath);
     ~SignalReader();
 
+    
     /**
      * @brief 判断是否读取正常
      */
-    bool isOk() const { return static_cast<bool>(mChannelMap); }
+    bool isOk() const { return !mChannelMap.empty(); }
 
     DataGroupList getDataGroupList() const;
 
-    /**
-     * @brief 获取信号名列表
-     */
-    QStringList getSignalList() const;
-
+    QStringList getSignalNameList() const;
     /**
      * @brief 根据信号名获取对应数据
      * @param signalName 信号名
@@ -66,8 +63,8 @@ private:
     void cleanData();
 
 private:
-    MdfReaderPtr mReader;
-    ChannelObserverMapPtr mChannelMap;
+    std::unique_ptr<MdfReader> mReader;
+    ChannelObserverMap mChannelMap;
 
 };
 

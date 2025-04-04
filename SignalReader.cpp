@@ -2,11 +2,13 @@
 
 #include <QDebug>
 
+#include <memory>
+#include <utility>
+
 using namespace mdf;
 
 SignalReader::SignalReader(const QString& filePath)
     : mReader(nullptr)
-    , mChannelMap(new ChannelObserverMap)
 {
     if (mReader == nullptr)
     {
@@ -32,6 +34,7 @@ SignalReader::SignalReader(const QString& filePath)
         return;
     }
 
+    
     if (!loadData())
     {
         qDebug() << "MdfReader get channel observer error";
@@ -52,14 +55,14 @@ mdf::DataGroupList SignalReader::getDataGroupList() const
     return dgList;
 }
 
-QStringList SignalReader::getSignalList() const
+QStringList SignalReader::getSignalNameList() const
 {
     if (!isOk())
     {
         return {};
     }
     QStringList channelList;
-    for (auto iter = mChannelMap->cbegin(); iter != mChannelMap->cend(); ++iter)
+    for (auto iter = mChannelMap.cbegin(); iter != mChannelMap.cend(); ++iter)
     {
         channelList.push_back(QString::fromStdString(iter->second->Name()));
     }
@@ -72,8 +75,8 @@ QVector<double> SignalReader::getSignalValueList(const QString &signalName) cons
     {
         return {};
     }
-    auto iter = mChannelMap->find(signalName.toStdString());
-    if (iter == mChannelMap->end())
+    auto iter = mChannelMap.find(signalName.toStdString());
+    if (iter == mChannelMap.end())
     {
         return {};
     }
@@ -104,7 +107,7 @@ bool SignalReader::loadData()
             for (const auto* cn4 : cn_list)
             {
                 auto sub = CreateChannelObserver(*dg4, *cg4, *cn4);
-                (*mChannelMap)[cn4->Name()] = std::move(sub);
+                mChannelMap[cn4->Name()] = std::move(sub);
             }
         }
         if (!mReader->ReadData(*dg4))

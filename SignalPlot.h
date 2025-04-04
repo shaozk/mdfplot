@@ -12,10 +12,13 @@
 #pragma once
 
 #include "qcp/qcustomplot.h"
-#include "Signals.h"
-
 #include <QVector>
 #include <QList>
+
+class Signals;
+class QCustomPlot;
+class QCPAxisRect;
+class Signals;
 
 class SignalPlot : public QCustomPlot  
 {
@@ -23,14 +26,16 @@ public:
     explicit SignalPlot(QWidget *parent = nullptr);
     ~SignalPlot();
 
-    void addSubRect(const QString& signalName);
+    void addSubRect(const Signals* signal, const QVector<double>& valueList);
     void removeAllRect();
-    void createSubRect(int num);
 
-    void plotSignal(QCPAxisRect* rect, const QString& sigName, QColor color, const QVector<float>& signal);
+private:
+    QCPAxisRect* createSubRect(int no);
+    void plotSignal(QCPAxisRect* rect, const Signals* signal, const QVector<double>& valueList);
 
 private:
     QList<QCPAxisRect*> mRectList;
+    size_t mRectCount;
     
 };
  

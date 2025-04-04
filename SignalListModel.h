@@ -11,43 +11,46 @@
 
 #pragma once
 
-#include "Signals.h"
-
-#include <QObject>
 #include <QAbstractItemModel>
 #include <QList>
+#include "Signals.h"
 
-class SignalListModel : public QAbstractItemModel
+class Signals;
+
+
+class SignalListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit SignalListModel(QObject *parent = nullptr);
     ~SignalListModel() override;
 
-    enum ColoumnType{
-        Name = 0,
-        Value,
-        Color,
-        CololumnCount
+    enum SignalItem
+    {
+        NameItem = 0,
+        ValueItem,
+        ColorItem,
+        SignalItemCount
     };
-    Q_ENUM(ColoumnType)
-
 #if 1
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &child) const override;
 #endif
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
-    
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+   
+    // 自定义方法
     void addSignal(const Signals& signal);
-    void setSignalList(const QList<Signals>& signalList);
+    const Signals* getSignal(const QModelIndex& index);
+    // void removeSignal(int row);
+    // void updateSignal(int row, const Signals& signal);
+    // void addSignalList(SignalList& signalList);
 
 private:
 
-    QList<Signals> mSignalList;
-
-
+    QVector<Signals> mSignalList;
+    
 };

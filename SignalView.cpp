@@ -1,26 +1,25 @@
 #include "SignalView.h"
+#include "Signals.h"
 
 SignalView::SignalView(const QString& filePath, QWidget* parent)
     : QWidget(parent)
 {
-    
     // 新建视图
-    mExplorer = new SignalExplorer();
-    mModel = new SignalListModel();
+    mExplorer = new SignalExplorer(this);
+    mModel = new SignalListModel(this);
     mPlot = new SignalPlot();
 
-    SignalReader reader(filePath);
-    auto signalList = reader.getSignalList();
-    for (auto signal : signalList)
+    mReader = new SignalReader(filePath);
+    auto signalList = mReader->getSignalNameList();
+    for (auto signalName : signalList)
     {
-        mModel->addSignal(Signals(signal, "test", 1.0));
+        mModel->addSignal(Signals(signalName, "test", 1.0));
     }
     mExplorer->setModel(mModel);
-    // C++ 版本
     // Plot
-    // connect(mView, &SignalListView::signalSelected, mPlot, &SignalPlot::addSubRect);
+    connect(mExplorer, &SignalExplorer::signalSelected, this, &SignalView::plotSignal);
+    connect(mExplorer, &SignalExplorer::signalCanceled, this, &SignalView::clearSignal);
     
-
     // Layout
     QSplitter* splitter = new QSplitter(Qt::Horizontal);
     splitter->addWidget(mExplorer);
@@ -46,14 +45,28 @@ SignalView::~SignalView()
 
 bool SignalView::loadFile(const QString& filePath)
 {
-
+#if 0
     mReader = new SignalReader(filePath);
     // 获取信号里列表
     auto signalList = mReader->getSignalList();
 
     for (auto signal : signalList)
     {
-        mModel->addSignal(Signals(signal, "test", 1.0));
+        //mModel->addSignal(Signals(signal, "test", 1.0));
     }
+#endif
     return true;
+}
+
+void SignalView::plotSignal(const Signals* signal)
+{
+    mPlot->removeAllRect();
+    auto signalName = signal->name();
+    QVector<double> signalLine = mReader->getSignalValueList(signalName);
+    mPlot->addSubRect(signal, signalLine);
+}
+
+void SignalView::clearSignal()
+{
+    mPlot->removeAllRect();
 }

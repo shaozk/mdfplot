@@ -17,6 +17,7 @@ class Signals;
 class SignalListModel;
 
 class QListView;
+class QTreeView;
 class QLineEdit;
 class QPushButton;
 class QFrame;
@@ -32,14 +33,17 @@ public:
     void setModel(SignalListModel* model);
     
 signals:
-    void signalSelected(const Signals& signal);
+    void signalCanceled();
+    void signalSelected(const Signals* signal);
 
 protected:
+    void signalClicked(const QModelIndex& index);
 
 private:
-    QListView* mSignalView;
+    QTreeView* mSignalView;
 
     QLineEdit* mSearchEdit{nullptr};
     QFrame* mSearchFrame{nullptr};
 	QPushButton* mSearchBtn{nullptr};
+	QPushButton* mCancelBtn{nullptr};
 };

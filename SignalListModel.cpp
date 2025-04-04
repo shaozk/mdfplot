@@ -1,9 +1,12 @@
 #include "SignalListModel.h"
+#include "Signals.h"
 
 #include <QString>
+#include <QDebug>
+#include <utility>
 
 SignalListModel::SignalListModel(QObject* parent)
-    : QAbstractItemModel(parent)
+    : QAbstractListModel(parent)
 {
 }
 
@@ -11,7 +14,6 @@ SignalListModel::~SignalListModel()
 {
 }
 
-#if 1
 QModelIndex SignalListModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!parent.isValid())
@@ -25,7 +27,6 @@ QModelIndex SignalListModel::parent(const QModelIndex& index) const
 {
     return QModelIndex();
 }
-#endif
 
 int SignalListModel::rowCount(const QModelIndex& parent) const
 {
@@ -42,7 +43,7 @@ int SignalListModel::columnCount(const QModelIndex& parent) const
     {
         return 0;
     }
-    return CololumnCount;
+    return SignalItemCount;
 }
 
 QVariant SignalListModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -51,13 +52,13 @@ QVariant SignalListModel::headerData(int section, Qt::Orientation orientation, i
     {
         switch (section)
         {
-        case SignalListModel::Name:
+        case 0:
             return QString("Name");
             break;
-        case SignalListModel::Value:
+        case 1:
             return QString("Value");
             break;
-        case SignalListModel::Color:
+        case 2:
             return QString("Color");
             break;
         default:
@@ -66,6 +67,7 @@ QVariant SignalListModel::headerData(int section, Qt::Orientation orientation, i
     }
     return QVariant();
 }
+
 
 QVariant SignalListModel::data(const QModelIndex& index, int role) const
 {
@@ -76,19 +78,19 @@ QVariant SignalListModel::data(const QModelIndex& index, int role) const
 
     const auto& signal = mSignalList.at(index.row());
 
-    auto type = static_cast<ColoumnType>(index.column());
-    switch (type)
+    switch (index.column())
     {
-    case SignalListModel::Name:
+    case 0:
         return signal.name();   
         break;
-    case SignalListModel::Value:
+    case 1:
         return signal.value();
         break;
-    case SignalListModel::Color:
+    case 2:
         return signal.color();
         break;
     default:
+        return "Valid";
         break;
     }
     return QVariant();
@@ -97,7 +99,11 @@ QVariant SignalListModel::data(const QModelIndex& index, int role) const
 
 QHash<int, QByteArray> SignalListModel::roleNames() const
 {
-    return {};
+    QHash<int, QByteArray> roles;
+    roles[0] = "Name";
+    roles[1] = "Value";
+    roles[2] = "Color";
+    return roles;
 }
 
 void SignalListModel::addSignal(const Signals& signal)
@@ -107,9 +113,11 @@ void SignalListModel::addSignal(const Signals& signal)
     endInsertRows();
 }
 
-void SignalListModel::setSignalList(const QList<Signals>& signalList)
+const Signals* SignalListModel::getSignal(const QModelIndex& index)
 {
-    beginResetModel();
-    mSignalList = signalList;
-    endResetModel();
+    if (index.isValid() && index.row() < mSignalList.size())
+    {
+        return &mSignalList[index.row()];
+    }
+    return nullptr;
 }
