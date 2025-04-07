@@ -62,6 +62,7 @@ void SignalPlot::removeAllRect()
     {
         plotLayout()->remove(rect);
     }    
+    clearPlottables();
     replot();
 }
 
@@ -70,7 +71,7 @@ QCPAxisRect* SignalPlot::createSubRect(int no)
     QCPAxisRect* rect = new QCPAxisRect(this);
 
     rect->setAutoMargins(QCP::msRight);
-    rect->axis(QCPAxis::atBottom)->setRange(0, 2000);
+    // rect->axis(QCPAxis::atBottom)->setRange(0, 2000);
     rect->axis(QCPAxis::atBottom)->grid()->setVisible(false);
     rect->axis(QCPAxis::atLeft)->grid()->setVisible(false);
     rect->setRangeDrag(Qt::Horizontal | Qt::Vertical); //水平方向拖动

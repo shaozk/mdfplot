@@ -10,10 +10,10 @@ SignalView::SignalView(const QString& filePath, QWidget* parent)
     mPlot = new SignalPlot();
 
     mReader = new SignalReader(filePath);
-    auto signalList = mReader->getSignalNameList();
-    for (auto signalName : signalList)
+    auto signalList = mReader->getSignalList();
+    for (auto signal : signalList)
     {
-        mModel->addSignal(Signals(signalName, "test", 1.0));
+        mModel->addSignal(signal);
     }
     mExplorer->setModel(mModel);
     // Plot

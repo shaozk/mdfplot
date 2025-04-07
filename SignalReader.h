@@ -42,6 +42,9 @@ public:
     DataGroupList getDataGroupList() const;
 
     QStringList getSignalNameList() const;
+
+    QVector<Signals> getSignalList() const;
+
     /**
      * @brief 根据信号名获取对应数据
      * @param signalName 信号名

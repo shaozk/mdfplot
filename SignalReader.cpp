@@ -1,4 +1,5 @@
 #include "SignalReader.h"
+#include "SignalUtil.h"
 
 #include <QDebug>
 
@@ -67,6 +68,22 @@ QStringList SignalReader::getSignalNameList() const
         channelList.push_back(QString::fromStdString(iter->second->Name()));
     }
     return channelList;
+}
+
+QVector<Signals> SignalReader::getSignalList() const
+{
+    if (!isOk())
+    {
+        return {};
+    }
+    QVector<Signals> signalList;
+    for (auto iter = mChannelMap.cbegin(); iter != mChannelMap.cend(); ++iter)
+    {
+        auto name = QString::fromStdString(iter->second->Name());
+        auto color = SignalUtil::getColor();
+        signalList.push_back(Signals(name, color, 0.0f));
+    }
+    return signalList;
 }
 
 QVector<double> SignalReader::getSignalValueList(const QString &signalName) const

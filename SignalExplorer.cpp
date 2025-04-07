@@ -55,7 +55,8 @@ SignalExplorer::SignalExplorer(QWidget* parent)
 	mSignalView->setAcceptDrops(true);
 	mSignalView->setDropIndicatorShown(true);
 	mSignalView->setDragDropMode(QAbstractItemView::InternalMove);
-	mSignalView->header()->sectionResizeMode(QHeaderView::Stretch);
+	mSignalView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	mSignalView->header()->setStretchLastSection(false);
 	layout->addWidget(mSignalView);
 
 	connect(mSignalView, &QTreeView::clicked, this, &SignalExplorer::signalClicked);
@@ -70,6 +71,13 @@ SignalExplorer::~SignalExplorer()
 void SignalExplorer::setModel(SignalListModel* model)
 {
 	mSignalView->setModel(std::move(model));
+	// 设置第一列固定宽度为100像素
+	mSignalView->setColumnWidth(0, 100);  // 0表示第一列
+
+	// 设置其他列自动调整或可拉伸
+	mSignalView->header()->setSectionResizeMode(0, QHeaderView::Stretch);  // 固定第一列
+	mSignalView->header()->setSectionResizeMode(1, QHeaderView::Fixed); // 第二列可拉伸
+	mSignalView->header()->setSectionResizeMode(2, QHeaderView::Fixed); // 第二列可拉伸
 	/// connect(model, &SignalListModel::signalSelected, this, &SignalExplorer::signalSelected)
 	
 

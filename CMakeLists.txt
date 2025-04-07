@@ -22,6 +22,8 @@ set(PROJECT_UTILS
     "Signals.cpp"
     "SignalReader.h"
     "SignalReader.cpp"
+    "SignalUtil.h"
+    "SignalUtil.cpp"
 )
 
 set(PROJECT_SOURCES
