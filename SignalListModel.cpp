@@ -8,10 +8,12 @@
 SignalListModel::SignalListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+
 }
 
 SignalListModel::~SignalListModel()
 {
+    
 }
 
 QModelIndex SignalListModel::index(int row, int column, const QModelIndex& parent) const

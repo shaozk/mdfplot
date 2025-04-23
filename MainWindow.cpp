@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     mMdiArea->setViewMode(QMdiArea::TabbedView);
     mMdiArea->setTabsClosable(true);
     mMdiArea->setTabsMovable(true);
-    //on_actionOpenFile_triggered();
 }
 
 MainWindow::~MainWindow()
@@ -32,7 +31,17 @@ MainWindow::~MainWindow()
 void MainWindow::on_actionOpenFile_triggered()
 {
     // 打开文件管理器，获取文件路径
-    QString filePath = "U:\\mdf\\Recorder_2024-06-17_01-05-29.mf4";
+#if 0
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("MDF Files (*.mf4)"));
+    if (filePath.isEmpty())
+    {
+        QMessageBox::warning(this, tr("Error"), tr("No file selected."));
+        return;
+    }
+#else 
+    QString filePath = "Z:\\data\\mdf\\Recorder_2024-06-17_01-05-29.mf4";
+#endif
+
     SignalView *view = new SignalView(filePath);
 
     QMdiSubWindow* subWindow = mMdiArea->addSubWindow(view);

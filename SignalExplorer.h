@@ -36,6 +36,9 @@ signals:
     void signalCanceled();
     void signalSelected(const Signals* signal);
 
+public slots:
+    void valueChanged(int pos);
+
 protected:
     void signalClicked(const QModelIndex& index);
 

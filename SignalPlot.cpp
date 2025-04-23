@@ -3,6 +3,7 @@
 #include "Signals.h"
 #include <QVector>
 #include <QList>
+#include <QtMath>
 SignalPlot::SignalPlot(QWidget* parent)
     : QCustomPlot(parent)
 {
@@ -22,6 +23,60 @@ void SignalPlot::addSubRect(const Signals* signal, const QVector<double>& valueL
     qDebug() << "add sub rect " << signal->name();
     auto* rect = createSubRect(0);
     plotSignal(rect, signal, valueList);    
+
+    mCursor = new QCPItemStraightLine(this);
+    mCursor->setClipAxisRect(rect);
+    mCursor->setLayer("overlay");
+    mCursor->setPen(QPen(Qt::black, 1, Qt::SolidLine));//设置游标线的样式
+    mCursor->setClipToAxisRect(true);//自适应范围
+    mCursor->setVisible(true);
+    QCPRange keyRange = rect->axis(QCPAxis::atBottom)->range();
+    mCursor->point1->setCoords(0, keyRange.upper);//起点坐标
+    mCursor->point2->setCoords(0, keyRange.lower);//终点坐标
+    replot();
+}
+
+void SignalPlot::mousePressEvent(QMouseEvent* event)
+{
+    QCustomPlot::mousePressEvent(event);
+#if 1
+    if (event->button() != Qt::LeftButton)
+    {
+        return;
+    }
+    QCPAxisRect* rect = axisRectAt(event->pos());
+    if (!rect)
+    {
+        return;
+    }
+
+    double posX = qRound(rect->axis(QCPAxis::atBottom)->pixelToCoord(event->pos().x()));
+    if (posX < 0)
+    {
+        posX = 0;
+    }
+    
+    QCPRange range = rect->axis(QCPAxis::atBottom)->range();
+    mCursor->point1->setCoords(posX, range.upper);
+    mCursor->point2->setCoords(posX, range.lower);
+#endif 
+}
+
+void SignalPlot::mouseMoveEvent(QMouseEvent* event)
+{
+    QCustomPlot::mouseMoveEvent(event);
+}
+
+void SignalPlot::mouseReleaseEvent(QMouseEvent* event)
+{
+    QCustomPlot::mouseReleaseEvent(event); 
+    QCPAxisRect* rect = axisRectAt(event->pos());
+    if (!rect)
+    {
+        return;
+    }
+    int posX = qRound(rect->axis(QCPAxis::atBottom)->pixelToCoord(event->pos().x()));
+    emit cursorChanged(posX);
     replot();
 }
 
@@ -71,7 +126,6 @@ QCPAxisRect* SignalPlot::createSubRect(int no)
     QCPAxisRect* rect = new QCPAxisRect(this);
 
     rect->setAutoMargins(QCP::msRight);
-    // rect->axis(QCPAxis::atBottom)->setRange(0, 2000);
     rect->axis(QCPAxis::atBottom)->grid()->setVisible(false);
     rect->axis(QCPAxis::atLeft)->grid()->setVisible(false);
     rect->setRangeDrag(Qt::Horizontal | Qt::Vertical); //水平方向拖动
@@ -92,17 +146,6 @@ QCPAxisRect* SignalPlot::createSubRect(int no)
         plotLayout()->addElement(no, 0, rect);
     }
     //connectAllxAsix(true);
-#if 0
-    QCPItemStraightLine* line = new QCPItemStraightLine(this);
-    line->setClipAxisRect(rect);
-    line->setLayer("overlay");
-    line->setPen(QPen(Qt::black, 1, Qt::SolidLine));//设置游标线的样式
-    line->setClipToAxisRect(true);//自适应范围
-    line->setVisible(true);
-    QCPRange keyRange = rect->axis(QCPAxis::atBottom)->range();
-    line->point1->setCoords(0, keyRange.upper);//起点坐标
-    line->point2->setCoords(0, keyRange.lower);//终点坐标
-#endif
-    return rect;
 
+    return rect;
 }

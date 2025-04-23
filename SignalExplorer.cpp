@@ -83,6 +83,11 @@ void SignalExplorer::setModel(SignalListModel* model)
 
 }
 
+void SignalExplorer::valueChanged(int pos)
+{
+	qDebug() << "value changed" << pos;
+}
+
 void SignalExplorer::signalClicked(const QModelIndex& index)
 {
 	auto* model = qobject_cast<SignalListModel*>(mSignalView->model());
